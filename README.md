@@ -11,7 +11,7 @@ npm install discordbot-js
 1. Moderator:
 ```shell
 	- ban:					|	ban a member
-	- bans:					|   view baned list 
+	- bans:					|   	view baned list 
 	- chnick:				|	change nick name a member
 	- chrole:				|	change role a member
 	- deafen:				|	set deafen a member
@@ -26,7 +26,7 @@ npm install discordbot-js
 2. Music:
 ```shell
 	- join:					|	join your current voice channel
-	- leave:				|   leave current voice channel
+	- leave:				|   	leave current voice channel
 	- nplay:				|	see what track is playing
 	- pause:				|	Pause playing
 	- play:					|	play an url, find and play from a query
