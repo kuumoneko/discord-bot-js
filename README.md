@@ -20,7 +20,7 @@ npm install discordbot-js
 	- timeout:				|	set timeout a member
 	- undeafen:				|	remove deafen a member
 	- unmute:				|	remove mute a member
-	- untimeout:					|	remove timeout a member
+	- untimeout:				|	remove timeout a member
 ```
 
 2. Music:
