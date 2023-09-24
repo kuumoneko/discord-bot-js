@@ -3,7 +3,7 @@
 # Install:
 
 ```shell
-npm install discordbot-js
+npm i discordpath-js
 ```
 
 # Support:

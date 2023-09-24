@@ -1,5 +1,5 @@
 {
-  "name": "discordbot-js",
+  "name": "discordpath-js",
   "version": "1.0.0",
   "description": "discordbot using js",
   "main": "index.js",
@@ -81,5 +81,11 @@
     "ws": "^8.14.1",
     "youtube-ext": "^1.1.10",
     "ytdl-core": "^4.11.5"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {
+    "coffee-script": "^1.12.7"
   }
 }
