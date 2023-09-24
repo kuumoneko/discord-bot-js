@@ -1,101 +1,123 @@
-const { discordClient } = require('../index');
-const config = require('../config.json')
+const { discordClient } = require("../index");
+const config = require("../config.json");
 
-const fs = require('node:fs');
-const path = require('node:path');
-const { Collection, Events } = require('discord.js');
-const { REST, Routes } = require('discord.js');
+const fs = require("node:fs");
+const path = require("node:path");
+const { Collection, Events } = require("discord.js");
+const { REST, Routes } = require("discord.js");
 
 const client = new discordClient({
-    name: config.name,
-    prefix: config.prefix,
-    cookie_U: config.cookie_U,
-    cookies: config.cookies,
-})
+  name: config.name,
+  prefix: config.prefix,
+  youtube_api_key: config.YOUTUBE_API_KEY,
+  cookie_U: config.cookie_U,
+  cookies: config.cookies,
+});
 
 async function setup() {
-    await client.setup();
+  await client.setup();
 }
 
-setup()
+setup();
 
 const commands = [];
 
-const commands_path = path.join(__dirname, 'Commands');
-const commands_files = fs.readdirSync(commands_path).filter(file => file.endsWith('.js'));
+const commands_path = path.join(__dirname, "Commands");
+const commands_files = fs
+  .readdirSync(commands_path)
+  .filter((file) => file.endsWith(".js"));
 
 for (const file of commands_files) {
-    const filePath = path.join(commands_path, file);
-    const command = require(filePath);
-    if ('data' in command && 'execute' in command) {
-        // console.log(command.data.name);
-        commands.push(command.data.toJSON())
-    } else {
-        console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
-    }
+  const filePath = path.join(commands_path, file);
+  const command = require(filePath);
+  if ("data" in command && "execute" in command) {
+    // console.log(command.data.name);
+    commands.push(command.data.toJSON());
+  } else {
+    console.log(
+      `[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`
+    );
+  }
 }
 
 const rest = new REST().setToken(config.token);
 
 (async () => {
-    try {
-        console.log(`Started refreshing ${commands.length} application (/) commands.`);
+  try {
+    console.log(
+      `Started refreshing ${commands.length} application (/) commands.`
+    );
 
-        const data = await rest.put(
-            Routes.applicationCommands(config.clientId),
-            { body: commands },
-        );
+    const data = await rest.put(Routes.applicationCommands(config.clientId), {
+      body: commands,
+    });
 
-        console.log(`Successfully reloaded ${data.length} application (/) commands.`);
-    } catch (error) {
-        console.error(error);
-    }
+    console.log(
+      `Successfully reloaded ${data.length} application (/) commands.`
+    );
+  } catch (error) {
+    console.error(error);
+  }
 })();
 
 client.client.commands = new Collection();
 
-const commandsPath = path.join(__dirname, 'Commands');
-const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+const commandsPath = path.join(__dirname, "Commands");
+const commandFiles = fs
+  .readdirSync(commandsPath)
+  .filter((file) => file.endsWith(".js"));
 
 for (const file of commandFiles) {
-    const filePath = path.join(commandsPath, file);
-    const command = require(filePath);
-    if ('data' in command && 'execute' in command) {
-        client.client.commands.set(command.data.name, command);
-        // console.log(command.data.name);
-    } else {
-        console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
-    }
+  const filePath = path.join(commandsPath, file);
+  const command = require(filePath);
+  if ("data" in command && "execute" in command) {
+    client.client.commands.set(command.data.name, command);
+    // console.log(command.data.name);
+  } else {
+    console.log(
+      `[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`
+    );
+  }
 }
 
-client.client.on(Events.InteractionCreate, async interaction => {
-    if (!interaction.isChatInputCommand()) return;
+client.client.on(Events.InteractionCreate, async (interaction) => {
+  if (!interaction.isChatInputCommand()) return;
 
-    const command = interaction.client.commands.get(interaction.commandName);
+  const command = interaction.client.commands.get(interaction.commandName);
 
-    if (!command) {
-        console.error(`No command matching ${interaction.commandName} was found.`);
-        return;
+  if (!command) {
+    console.error(`No command matching ${interaction.commandName} was found.`);
+    return;
+  }
+
+  try {
+    await command.execute(client, interaction);
+  } catch (error) {
+    console.error(error);
+    console.log(interaction.commandName);
+    if (interaction.replied || interaction.deferred) {
+      await interaction.followUp({
+        content: "There was an error while executing this command!",
+        ephemeral: true,
+      });
+    } else {
+      await interaction.reply({
+        content: "There was an error while executing this command!",
+        ephemeral: true,
+      });
     }
-
-    try {
-        await command.execute(client, interaction);
-    } catch (error) {
-        console.error(error);
-        console.log(interaction.commandName)
-        if (interaction.replied || interaction.deferred) {
-            await interaction.followUp({ content: 'There was an error while executing this command!', ephemeral: true });
-        } else {
-            await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
-        }
-    }
+  }
 });
 client.client.on("ready", () => {
-    console.log(`[Warning] Make sure that you have updated BingAI and Bard cookies`)
-    console.log(`if you don't update cookies, you can have some error when running`)
-    console.log(`Recommend updating cookies cookies before running bot:>`)
-    console.log(`Logged in as ${client.client.user.tag}!`)
-})
+  console.log(
+    `[Warning] Make sure that you have updated BingAI and Bard cookies`
+  );
+  console.log(
+    `if you don't update cookies, you can have some error when running`
+  );
+  console.log(`Recommend updating cookies cookies before running bot:>`);
+  console.log(`Logged in as ${client.client.user.tag}!`);
+});
 
 // Log in to Discord with your client.client's token
 

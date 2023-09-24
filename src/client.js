@@ -5,20 +5,21 @@ const { ChatBot: EdgeChatBot } = require('bingai-js');
 const { ChatBot: BardChatBot } = require('googlebard-js')
 const { SpotifyExtractor, YouTubeExtractor, SoundCloudExtractor } = require('@discord-player/extractor');
 
-// const cookies = require('../database/cookies.json');
-
 class discordClient {
     constructor(data) {
         /**
          * data = {
          *      name: str,
          *      prifix: str,
+         *      youtube_api_key: str.
          *      cookie: [],
          *      cookie_U : str,
+         * 
          * }
          */
         this.name = data.name
         this.version = "v0.7.0"
+        this.ytb_api_key = data.youtube_api_key;
         this.prefix = data.prefix
         this.client = new discord.Client({
             intents: Object.keys(discord.GatewayIntentBits).map((a) => {

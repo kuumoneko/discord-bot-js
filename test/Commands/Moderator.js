@@ -1,297 +1,422 @@
-const { SlashCommandBuilder, CommandInteraction, PermissionFlagsBits } = require('discord.js');
-const { discordClient, ban_member, view_bans, chnick_member, chrole_member, deafen_member,
-    kick_member, mute_member, timeout_member, undeafen_member, unmute_member, untimeout_member } = require('../../index');
-
+const {
+  SlashCommandBuilder,
+  CommandInteraction,
+  PermissionFlagsBits,
+} = require("discord.js");
+const {
+  discordClient,
+  ban_member,
+  view_bans,
+  chnick_member,
+  chrole_member,
+  deafen_member,
+  kick_member,
+  mute_member,
+  timeout_member,
+  undeafen_member,
+  unmute_member,
+  untimeout_member,
+} = require("../../src/index");
 
 module.exports = {
-    data: new SlashCommandBuilder()
-        .setName('moderator')
-        .setDescription('Moderate your server').
-        setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
-        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
-        .setDefaultMemberPermissions(PermissionFlagsBits.ManageNicknames)
-        .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles)
-        .setDefaultMemberPermissions(PermissionFlagsBits.DeafenMembers)
-        .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
-        .setDefaultMemberPermissions(PermissionFlagsBits.MuteMembers)
-        .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
-        .addSubcommand(scm =>
-            scm
-                .setName('ban')
-                .setDescription('Ban a member! (only use slash command)')
+  data: new SlashCommandBuilder()
+    .setName("moderator")
+    .setDescription("Moderate your server")
+    .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
+    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageNicknames)
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles)
+    .setDefaultMemberPermissions(PermissionFlagsBits.DeafenMembers)
+    .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
+    .setDefaultMemberPermissions(PermissionFlagsBits.MuteMembers)
+    .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
+    .addSubcommand((scm) =>
+      scm
+        .setName("ban")
+        .setDescription("Ban a member! (only use slash command)")
 
-                .addUserOption(member =>
-                    member.setName('member')
-                        .setDescription('Who do you want to call?')
-                        .setRequired(true))
-                .addStringOption(reason =>
-                    reason.setName('reason')
-                        .setDescription('Why you want to do to that?'))
-
+        .addUserOption((member) =>
+          member
+            .setName("member")
+            .setDescription("Who do you want to call?")
+            .setRequired(true)
         )
-        .addSubcommand(scm =>
-            scm
-                .setName('bans')
-                .setDescription('See bans list and unban member! (only use slash command)')
-
+        .addStringOption((reason) =>
+          reason.setName("reason").setDescription("Why you want to do to that?")
         )
-        .addSubcommand(scm =>
-            scm
-                .setName('chnick')
-                .setDescription('Change nickname for a member! (only use slash command)')
-                .addUserOption(member =>
-                    member.setName('member')
-                        .setDescription('Who do you want to call?')
-                        .setRequired(true))
-                .addStringOption(nick =>
-                    nick.setName('nick')
-                        .setDescription('what nick you want to change?'))
-
+    )
+    .addSubcommand((scm) =>
+      scm
+        .setName("bans")
+        .setDescription(
+          "See bans list and unban member! (only use slash command)"
         )
-        .addSubcommand(scm =>
-            scm
-                .setName('chrole')
-                .setDescription('Change role for a member! (only use slash command)')
-                .addUserOption(member =>
-                    member.setName('member')
-                        .setDescription('Who do you want to call?')
-                        .setRequired(true))
-                .addRoleOption(role =>
-                    role.setName('role')
-                        .setDescription('What role you want to change?'))
-
+    )
+    .addSubcommand((scm) =>
+      scm
+        .setName("chnick")
+        .setDescription(
+          "Change nickname for a member! (only use slash command)"
         )
-        .addSubcommand(scm =>
-            scm
-                .setName('deafen')
-                .setDescription('deafen a member! (only use slash command)')
-
-                .addUserOption(option =>
-                    option.setName('member')
-                        .setDescription('Who do you want to call?')
-                        .setRequired(true))
-                .addStringOption(option =>
-                    option.setName('reason')
-                        .setDescription('Why you want to do to that?'))
-
+        .addUserOption((member) =>
+          member
+            .setName("member")
+            .setDescription("Who do you want to call?")
+            .setRequired(true)
         )
-        .addSubcommand(scm =>
-            scm
-                .setName('kick')
-                .setDescription('Kick a member! (only use slash command)')
-                .addUserOption(member =>
-                    member.setName('member')
-                        .setDescription('Who do you want to call?')
-                        .setRequired(true))
-                .addStringOption(reason =>
-                    reason.setName('reason')
-                        .setDescription('Why you want to do to that?'))
-
+        .addStringOption((nick) =>
+          nick.setName("nick").setDescription("what nick you want to change?")
         )
-        .addSubcommand(scm =>
-            scm
-                .setName('mute')
-                .setDescription('mute a member! (only use slash command)')
-
-                .addUserOption(option =>
-                    option.setName('member')
-                        .setDescription('Who do you want to call?')
-                        .setRequired(true))
-                .addStringOption(option =>
-                    option.setName('reason')
-                        .setDescription('Why you want to do to that?'))
-
+    )
+    .addSubcommand((scm) =>
+      scm
+        .setName("chrole")
+        .setDescription("Change role for a member! (only use slash command)")
+        .addUserOption((member) =>
+          member
+            .setName("member")
+            .setDescription("Who do you want to call?")
+            .setRequired(true)
         )
-        .addSubcommand(scm =>
-            scm
-                .setName('timeout')
-                .setDescription('Timeout a member! (only use slash command)')
-
-                .addUserOption(option =>
-                    option.setName('member')
-                        .setDescription('Who do you want to call?')
-                        .setRequired(true))
-
-                .addIntegerOption(option =>
-                    option.setName('time')
-                        .setRequired(true)
-                        .setDescription('How long you want to timeout?'))
-                .addStringOption(option =>
-                    option.setName('value')
-                        .setDescription('Time Unit')
-                        .setRequired(true)
-                        .addChoices(
-                            { name: 'Seconds', value: 'Seconds' },
-                            { name: 'Minutes', value: 'Minutes' },
-                            { name: 'Hours', value: 'Hours' },
-                            { name: 'Days', value: 'Days' },
-                            { name: 'Weeks', value: 'Weeks' },
-                        ))
-
-                .addStringOption(option =>
-                    option.setName('reason')
-                        .setDescription('Why you want to do to that?'))
-
-
+        .addRoleOption((role) =>
+          role.setName("role").setDescription("What role you want to change?")
         )
-        .addSubcommand(scm =>
-            scm
-                .setName('undeafen')
-                .setDescription('undeafen a member! (only use slash command)')
+    )
+    .addSubcommand((scm) =>
+      scm
+        .setName("deafen")
+        .setDescription("deafen a member! (only use slash command)")
 
-                .addUserOption(option =>
-                    option.setName('member')
-                        .setDescription('Who do you want to call?')
-                        .setRequired(true))
-                .addStringOption(option =>
-                    option.setName('reason')
-                        .setDescription('Why you want to do to that?'))
+        .addUserOption((option) =>
+          option
+            .setName("member")
+            .setDescription("Who do you want to call?")
+            .setRequired(true)
         )
-        .addSubcommand(scm =>
-            scm
-                .setName('unmute')
-                .setDescription('unmute a member! (only use slash command)')
-
-                .addUserOption(option =>
-                    option.setName('member')
-                        .setDescription('Who do you want to call?')
-                        .setRequired(true))
-                .addStringOption(option =>
-                    option.setName('reason')
-                        .setDescription('Why you want to do to that?'))
+        .addStringOption((option) =>
+          option.setName("reason").setDescription("Why you want to do to that?")
         )
-        .addSubcommand(scm =>
-            scm
-                .setName('untimeout')
-                .setDescription('Untimeout a  member! (only use slash command)')
-                .addUserOption(option =>
-                    option.setName('member')
-                        .setDescription('Who do you want to call?')
-                        .setRequired(true))
-                .addStringOption(reason =>
-                    reason.setName('reason')
-                        .setDescription('Why do you do that?'))
-        ),
+    )
+    .addSubcommand((scm) =>
+      scm
+        .setName("kick")
+        .setDescription("Kick a member! (only use slash command)")
+        .addUserOption((member) =>
+          member
+            .setName("member")
+            .setDescription("Who do you want to call?")
+            .setRequired(true)
+        )
+        .addStringOption((reason) =>
+          reason.setName("reason").setDescription("Why you want to do to that?")
+        )
+    )
+    .addSubcommand((scm) =>
+      scm
+        .setName("mute")
+        .setDescription("mute a member! (only use slash command)")
 
-    /**
-     * 
-     * @param {discordClient} client 
-     * @param {CommandInteraction} interaction 
-     */
-    async execute(client, interaction) {
-        await interaction.deferReply({
-            ephemeral: true
-        })
+        .addUserOption((option) =>
+          option
+            .setName("member")
+            .setDescription("Who do you want to call?")
+            .setRequired(true)
+        )
+        .addStringOption((option) =>
+          option.setName("reason").setDescription("Why you want to do to that?")
+        )
+    )
+    .addSubcommand((scm) =>
+      scm
+        .setName("timeout")
+        .setDescription("Timeout a member! (only use slash command)")
 
-        const scm = interaction.options.getSubcommand();
+        .addUserOption((option) =>
+          option
+            .setName("member")
+            .setDescription("Who do you want to call?")
+            .setRequired(true)
+        )
 
-        var result = "";
+        .addIntegerOption((option) =>
+          option
+            .setName("time")
+            .setRequired(true)
+            .setDescription("How long you want to timeout?")
+        )
+        .addStringOption((option) =>
+          option
+            .setName("value")
+            .setDescription("Time Unit")
+            .setRequired(true)
+            .addChoices(
+              { name: "Seconds", value: "Seconds" },
+              { name: "Minutes", value: "Minutes" },
+              { name: "Hours", value: "Hours" },
+              { name: "Days", value: "Days" },
+              { name: "Weeks", value: "Weeks" }
+            )
+        )
 
-        if (scm === 'ban') {
-            const mb = interaction.options.getUser('member');
-            const reason = interaction.options.getString('reason');
+        .addStringOption((option) =>
+          option.setName("reason").setDescription("Why you want to do to that?")
+        )
+    )
+    .addSubcommand((scm) =>
+      scm
+        .setName("undeafen")
+        .setDescription("undeafen a member! (only use slash command)")
 
-            const AuthorMember = interaction.guild.members.cache.find(member => member.id === interaction.user.id);
-            const targetMember = interaction.guild.members.cache.find(member => member.id === mb.id);
+        .addUserOption((option) =>
+          option
+            .setName("member")
+            .setDescription("Who do you want to call?")
+            .setRequired(true)
+        )
+        .addStringOption((option) =>
+          option.setName("reason").setDescription("Why you want to do to that?")
+        )
+    )
+    .addSubcommand((scm) =>
+      scm
+        .setName("unmute")
+        .setDescription("unmute a member! (only use slash command)")
 
-            result = await ban_member(client, interaction, AuthorMember, targetMember, reason);
-        }
-        else if (scm === 'bans') {
-            await view_bans(client, interaction)
-        }
-        else if (scm === 'chnick') {
-            const mb = interaction.options.getUser('member');
-            const nick = interaction.options.getString('nick') ?? "";
+        .addUserOption((option) =>
+          option
+            .setName("member")
+            .setDescription("Who do you want to call?")
+            .setRequired(true)
+        )
+        .addStringOption((option) =>
+          option.setName("reason").setDescription("Why you want to do to that?")
+        )
+    )
+    .addSubcommand((scm) =>
+      scm
+        .setName("untimeout")
+        .setDescription("Untimeout a  member! (only use slash command)")
+        .addUserOption((option) =>
+          option
+            .setName("member")
+            .setDescription("Who do you want to call?")
+            .setRequired(true)
+        )
+        .addStringOption((reason) =>
+          reason.setName("reason").setDescription("Why do you do that?")
+        )
+    ),
 
-            var targetMember = interaction.guild.members.cache.find(member => member.id === mb.id);
-            var AuthorMember = interaction.guild.members.cache.find(member => member.id === interaction.user.id);
+  /**
+   *
+   * @param {discordClient} client
+   * @param {CommandInteraction} interaction
+   */
+  async execute(client, interaction) {
+    await interaction.deferReply({
+      ephemeral: true,
+    });
 
-            result = await chnick_member(client, interaction, AuthorMember, targetMember, nick);
-        }
-        else if (scm === 'chrole') {
-            const mb = interaction.options.getUser('member');
-            const rl = interaction.options.getRole('role');
+    const scm = interaction.options.getSubcommand();
 
-            var targetMember = interaction.guild.members.cache.find(member => member.id === mb.id);
-            var AuthorMember = interaction.guild.members.cache.find(member => member.id === interaction.user.id);
-            var rolee = interaction.guild.roles.cache.find(role => role.name === rl.name);
+    var result = "";
 
-            result = await chrole_member(client, interaction, AuthorMember, targetMember, rolee);
-        }
-        else if (scm === 'deafen') {
-            var mb = interaction.options.getUser('member');
-            var reason = interaction.options.getString('reason') ?? 'None';
+    if (scm === "ban") {
+      const mb = interaction.options.getUser("member");
+      const reason = interaction.options.getString("reason");
 
-            const AuthorMember = interaction.guild.members.cache.find(member => member.id === interaction.user.id)
-            const targetMember = interaction.guild.members.cache.find(member => member.id === mb.id)
+      const AuthorMember = interaction.guild.members.cache.find(
+        (member) => member.id === interaction.user.id
+      );
+      const targetMember = interaction.guild.members.cache.find(
+        (member) => member.id === mb.id
+      );
 
-            result = await deafen_member(client, interaction, AuthorMember, targetMember, reason);
-        }
-        else if (scm === 'kick') {
-            const mb = interaction.options.getUser('member');
-            const reason = interaction.options.getString('reason') ?? 'None';
+      result = await ban_member(
+        client,
+        interaction,
+        AuthorMember,
+        targetMember,
+        reason
+      );
+    } else if (scm === "bans") {
+      await view_bans(client, interaction);
+    } else if (scm === "chnick") {
+      const mb = interaction.options.getUser("member");
+      const nick = interaction.options.getString("nick") ?? "";
 
-            var targetMember = interaction.guild.members.cache.find(member => member.id === mb.id);
-            var AuthorMember = interaction.guild.members.cache.find(member => member.id === interaction.user.id);
+      var targetMember = interaction.guild.members.cache.find(
+        (member) => member.id === mb.id
+      );
+      var AuthorMember = interaction.guild.members.cache.find(
+        (member) => member.id === interaction.user.id
+      );
 
-            result = await kick_member(client, interaction, AuthorMember, targetMember, reason);
-        }
-        else if (scm === 'mute') {
-            var mb = interaction.options.getUser('member');
-            var reason = interaction.options.getString('reason') ?? 'None';
+      result = await chnick_member(
+        client,
+        interaction,
+        AuthorMember,
+        targetMember,
+        nick
+      );
+    } else if (scm === "chrole") {
+      const mb = interaction.options.getUser("member");
+      const rl = interaction.options.getRole("role");
 
-            const AuthorMember = interaction.guild.members.cache.find(member => member.id === interaction.user.id)
-            const targetMember = interaction.guild.members.cache.find(member => member.id === mb.id)
+      var targetMember = interaction.guild.members.cache.find(
+        (member) => member.id === mb.id
+      );
+      var AuthorMember = interaction.guild.members.cache.find(
+        (member) => member.id === interaction.user.id
+      );
+      var rolee = interaction.guild.roles.cache.find(
+        (role) => role.name === rl.name
+      );
 
-            result = await mute_member(client, interaction, AuthorMember, targetMember, reason);
-        }
-        else if (scm === 'timeout') {
-            var mb = interaction.options.getUser('member');
-            var time = interaction.options.getInteger('time');
-            var value = interaction.options.getString('value');
-            var reason = interaction.options.getString('reason') ?? 'None';
+      result = await chrole_member(
+        client,
+        interaction,
+        AuthorMember,
+        targetMember,
+        rolee
+      );
+    } else if (scm === "deafen") {
+      var mb = interaction.options.getUser("member");
+      var reason = interaction.options.getString("reason") ?? "None";
 
-            const AuthorMember = interaction.guild.members.cache.find(member => member.id === interaction.user.id)
-            const targetMember = interaction.guild.members.cache.find(member => member.id === mb.id)
+      const AuthorMember = interaction.guild.members.cache.find(
+        (member) => member.id === interaction.user.id
+      );
+      const targetMember = interaction.guild.members.cache.find(
+        (member) => member.id === mb.id
+      );
 
-            result = await timeout_member(client, interaction, AuthorMember, targetMember, time, value, reason);
-        }
-        else if (scm === 'undeafen') {
-            var mb = interaction.options.getUser('member');
-            var reason = interaction.options.getString('reason') ?? 'None';
+      result = await deafen_member(
+        client,
+        interaction,
+        AuthorMember,
+        targetMember,
+        reason
+      );
+    } else if (scm === "kick") {
+      const mb = interaction.options.getUser("member");
+      const reason = interaction.options.getString("reason") ?? "None";
 
-            const AuthorMember = interaction.guild.members.cache.find(member => member.id === interaction.user.id)
-            const targetMember = interaction.guild.members.cache.find(member => member.id === mb.id)
+      var targetMember = interaction.guild.members.cache.find(
+        (member) => member.id === mb.id
+      );
+      var AuthorMember = interaction.guild.members.cache.find(
+        (member) => member.id === interaction.user.id
+      );
 
-            result = await undeafen_member(client, interaction, AuthorMember, targetMember, reason);
-        }
-        else if (scm === 'unmute') {
-            var mb = interaction.options.getUser('member');
-            var reason = interaction.options.getString('reason') ?? 'None';
+      result = await kick_member(
+        client,
+        interaction,
+        AuthorMember,
+        targetMember,
+        reason
+      );
+    } else if (scm === "mute") {
+      var mb = interaction.options.getUser("member");
+      var reason = interaction.options.getString("reason") ?? "None";
 
-            const AuthorMember = interaction.guild.members.cache.find(member => member.id === interaction.user.id)
-            const targetMember = interaction.guild.members.cache.find(member => member.id === mb.id)
+      const AuthorMember = interaction.guild.members.cache.find(
+        (member) => member.id === interaction.user.id
+      );
+      const targetMember = interaction.guild.members.cache.find(
+        (member) => member.id === mb.id
+      );
 
-            result = await unmute_member(client, interaction, AuthorMember, targetMember, reason);
-        }
-        else if (scm === 'untimeout') {
-            const mb = interaction.options.getUser('member');
-            const reason = interaction.options.getString('reason') ?? 'None';
+      result = await mute_member(
+        client,
+        interaction,
+        AuthorMember,
+        targetMember,
+        reason
+      );
+    } else if (scm === "timeout") {
+      var mb = interaction.options.getUser("member");
+      var time = interaction.options.getInteger("time");
+      var value = interaction.options.getString("value");
+      var reason = interaction.options.getString("reason") ?? "None";
 
-            const AuthorMember = interaction.guild.members.cache.find(member => member.id === interaction.user.id);
-            const targetMember = interaction.guild.members.cache.find(member => member.id === mb.id);
+      const AuthorMember = interaction.guild.members.cache.find(
+        (member) => member.id === interaction.user.id
+      );
+      const targetMember = interaction.guild.members.cache.find(
+        (member) => member.id === mb.id
+      );
 
-            result = await untimeout_member(client, interaction, AuthorMember, targetMember, reason);
+      result = await timeout_member(
+        client,
+        interaction,
+        AuthorMember,
+        targetMember,
+        time,
+        value,
+        reason
+      );
+    } else if (scm === "undeafen") {
+      var mb = interaction.options.getUser("member");
+      var reason = interaction.options.getString("reason") ?? "None";
 
-        }
+      const AuthorMember = interaction.guild.members.cache.find(
+        (member) => member.id === interaction.user.id
+      );
+      const targetMember = interaction.guild.members.cache.find(
+        (member) => member.id === mb.id
+      );
 
-        if (result !== "") {
-            await interaction.followUp({
-                embeds: result,
-                ephemeral: true,
-            })
-        }
+      result = await undeafen_member(
+        client,
+        interaction,
+        AuthorMember,
+        targetMember,
+        reason
+      );
+    } else if (scm === "unmute") {
+      var mb = interaction.options.getUser("member");
+      var reason = interaction.options.getString("reason") ?? "None";
 
-    },
+      const AuthorMember = interaction.guild.members.cache.find(
+        (member) => member.id === interaction.user.id
+      );
+      const targetMember = interaction.guild.members.cache.find(
+        (member) => member.id === mb.id
+      );
 
-}
+      result = await unmute_member(
+        client,
+        interaction,
+        AuthorMember,
+        targetMember,
+        reason
+      );
+    } else if (scm === "untimeout") {
+      const mb = interaction.options.getUser("member");
+      const reason = interaction.options.getString("reason") ?? "None";
+
+      const AuthorMember = interaction.guild.members.cache.find(
+        (member) => member.id === interaction.user.id
+      );
+      const targetMember = interaction.guild.members.cache.find(
+        (member) => member.id === mb.id
+      );
+
+      result = await untimeout_member(
+        client,
+        interaction,
+        AuthorMember,
+        targetMember,
+        reason
+      );
+    }
+
+    if (result !== "") {
+      await interaction.followUp({
+        embeds: result,
+        ephemeral: true,
+      });
+    }
+  },
+};
