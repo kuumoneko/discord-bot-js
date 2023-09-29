@@ -16,6 +16,7 @@ const {
   undeafen_member,
   unmute_member,
   untimeout_member,
+  move_member,
 } = require("../../src/index");
 
 module.exports = {
@@ -201,6 +202,27 @@ module.exports = {
             .setName("member")
             .setDescription("Who do you want to call?")
             .setRequired(true)
+        )
+        .addStringOption((reason) =>
+          reason.setName("reason").setDescription("Why do you do that?")
+        )
+    )
+    .addSubcommand((scm) =>
+      scm
+        .setName("move")
+        .setDescription(
+          "Move member to another voice channel! (only use slash command)"
+        )
+        .addUserOption((option) =>
+          option
+            .setName("member")
+            .setDescription("Who do you want to call?")
+            .setRequired(true)
+        )
+        .addStringOption((channel) =>
+          channel
+            .setName("channel")
+            .setDescription("What voice chanel you want to move to")
         )
         .addStringOption((reason) =>
           reason.setName("reason").setDescription("Why do you do that?")
@@ -408,6 +430,26 @@ module.exports = {
         interaction,
         AuthorMember,
         targetMember,
+        reason
+      );
+    } else if (scm === "move") {
+      const mb = interaction.options.getUser("member");
+      const channel = interaction.options.getString("channel") ?? "None";
+      const reason = interaction.options.getString("reason") ?? "None";
+
+      const AuthorMember = interaction.guild.members.cache.find(
+        (member) => member.id === interaction.user.id
+      );
+      const targetMember = interaction.guild.members.cache.find(
+        (member) => member.id === mb.id
+      );
+
+      result = await move_member(
+        client,
+        interaction,
+        AuthorMember,
+        targetMember,
+        channel,
         reason
       );
     }
