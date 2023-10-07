@@ -4,7 +4,7 @@ const {
   EmbedBuilder,
   PermissionsBitField,
 } = require("discord.js");
-const { get_status, ai, get_ping } = require("../../src/index");
+const { get_status, get_result, get_ping } = require("../../src/index");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -67,7 +67,54 @@ module.exports = {
     if (scm === "chat") {
       const prompt = interaction.options.getString("prompt");
       const chatbot = interaction.options.getString("chatbot");
-      result = await ai(client, interaction, prompt, chatbot);
+      const response = await get_result(client, interaction, prompt, chatbot);
+      try {
+        var char_limit = 1900,
+          res_mess = [],
+          i = 0,
+          res = "";
+        // var b = "";
+        // if (b.indexOf('}}') != -1) {
+        // 	response = response.split('}}')[1];
+        // }
+        // var a = response.split('}}');
+
+        if (response.length > char_limit) {
+          var temp = response.split("\n");
+          var length_temp = temp.length;
+
+          while (i < length_temp - 1) {
+            if (temp[i].indexOf("[Image ") == -1) {
+              if ((res + temp[i]).length < char_limit) {
+                res += temp[i] + "\n";
+              } else {
+                res_mess.push(res);
+                res = temp[i] + "\n";
+              }
+            }
+            i++;
+          }
+
+          res_mess.push(res);
+          res_mess.forEach((string) => {
+            interaction.followUp({
+              content: `${string}`,
+              ephemeral: true,
+            });
+          });
+        } else {
+          interaction.followUp({
+            content: `${response}`,
+            ephemeral: true,
+          });
+        }
+      } catch (error) {
+        console.error(error);
+        await interaction.followUp({
+          content: `Something was wrong, please call my owner for help :<<`,
+          ephemeral: true,
+        });
+      }
     } else if (scm === "help") {
       const command_help =
         interaction.options.getString("command_helped") ?? "None";

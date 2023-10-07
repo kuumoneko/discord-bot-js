@@ -12,6 +12,7 @@ module.exports = get_result;
  * @param {string} chatbot 
  */
 async function get_result(client, interaction, prompt, chatbot) {
+    chatbot = chatbot.toLowerCase();
     return new Promise(async (resolve) => {
         try {
             var res = ""

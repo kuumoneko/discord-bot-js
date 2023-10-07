@@ -17,6 +17,7 @@ npm i discordpath-js
 	- deafen:				|	set deafen a member
 	- kick:					|	kick a member
 	- mute:					|	set mute a member
+	- move					| 	move member to another voice channel
 	- timeout:				|	set timeout a member
 	- undeafen:				|	remove deafen a member
 	- unmute:				|	remove mute a member
@@ -57,10 +58,12 @@ npm i discordpath-js
   "token": "Your-Bot-Token",
   "clientId": "Your-Bot-ClientId",
 
-  "YOUTUBE_API_KEY": "Your-Youtube-API-key",
+  "__Secure_1PSID": "Your-cookie-__Secure-1PSID",
+  "__Secure_1PSIDTS": "Your-cookie-__Secure-1PSIDTS",
 
   "cookie_U": "Your-cookie-_U",
-  "cookies": Your-Google-Bard-Cookie ,
+
+  "YOUTUBE_API_KEY": "Your-Youtube-API-key"
 }
 ```
 
@@ -108,7 +111,7 @@ npm i discordpath-js
 >
 > Copy value of cookies named `_U`
 >
-> Go to `database/config.json`
+> Go to `config.json`
 >
 > Paste the cookies to `cookie_U`
 
@@ -118,11 +121,11 @@ npm i discordpath-js
 >
 > Run your `cookies extension`
 >
-> Copy all cookies to JSON to your clipboard
+> Copy values of cookies named `__Secure-1PSID` and `__Secure-1PSIDTS`
 >
-> Go to `database/cookies.js`
+> Go to `config.json`
 >
-> Paste your cookies to this file
+> Paste your cookies value to `__Secure_1PSID` and `__Secure_1PSIDTS`
 
 # Get FFMPEG:
 

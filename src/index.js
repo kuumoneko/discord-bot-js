@@ -28,7 +28,7 @@ const {
   playing,
 } = require("./processor/Music");
 
-const { get_ping, get_status, ai } = require("./processor/Ultility");
+const { get_ping, get_status, get_result } = require("./processor/Ultility");
 
 const discordClient = require("./client");
 
@@ -62,7 +62,7 @@ module.exports = {
   stopping,
   playing,
   // Ai
-  ai,
+  get_result,
   // Ultility
   get_ping,
   get_status,

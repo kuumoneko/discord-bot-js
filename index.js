@@ -23,7 +23,7 @@ const {
   skipping,
   stopping,
   playing,
-  ai,
+  get_result,
   get_ping,
   get_status,
   discordClient,
@@ -59,7 +59,7 @@ module.exports = {
   stopping,
   playing,
   // Ai
-  ai,
+  get_result,
   // Ultility
   get_ping,
   get_status,

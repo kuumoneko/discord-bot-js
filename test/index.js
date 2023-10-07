@@ -11,13 +11,15 @@ const client = new discordClient({
   prefix: config.prefix,
   youtube_api_key: config.YOUTUBE_API_KEY,
   cookie_U: config.cookie_U,
-  cookies: config.cookies,
+  __Secure_1PSID: config.__Secure_1PSID,
+  __Secure_1PSIDTS: config.__Secure_1PSIDTS,
+  version: "v0.9.0",
 });
 
 async function setup() {
   await client.setup();
 }
-
+  
 setup();
 
 const commands = [];
