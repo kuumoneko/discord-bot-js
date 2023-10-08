@@ -1,6 +1,6 @@
 {
   "name": "discordpath-js",
-  "version": "1.3.0",
+  "version": "1.3.5",
   "description": "discordbot commands using js",
   "main": "index.js",
   "scripts": {
