@@ -1,24 +1,6 @@
 const { CommandInteraction } = require("discord.js");
 const { useQueue, useMainPlayer } = require("discord-player");
 const _ = require("lodash");
-
-// get a similar song from YouTube based on a video ID
-async function getSimilarSong(client, videoId) {
-  // construct the API URL with the relatedToVideoId filter
-  const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&relatedToVideoId=${videoId}&type=video&key=${client.ytb_api_key}`;
-  // fetch the response from the API
-  const response = await fetch(url);
-  // parse the response as JSON
-  const data = await response.json();
-  // get the first item from the results
-  const item = data.items[0];
-  // return the video ID and title of the similar song
-  return {
-    id: item.id.videoId,
-    title: item.snippet.title,
-  };
-}
-
 /**
  *
  * @param {*} client
@@ -73,8 +55,6 @@ async function playing(client, interaction) {
       await sleep(100);
     }
 
-    // console.log(client.ctrack[interaction.guildId])
-
     if (client.ctrack[interaction.guildId].length > 0)
       if (
         (await useMainPlayer().search(client.ctrack[interaction.guildId][0]))
@@ -88,18 +68,6 @@ async function playing(client, interaction) {
           client.ptrack[interaction.guildId].push(first);
         }
       }
-
-    if (
-      client.isloop[interaction.guildId] === "3" &&
-      client.ctrack[interaction.guildId].length === 0
-    ) {
-      const id = client.ptrack[interaction.guildId].substr(
-        client.ptrack[interaction.guildId] - 11
-      );
-      client.ctrack[
-        interaction.guildId
-      ] = `https://youtu.be/${await getSimilarSong(client, id)}`;
-    }
   }
 }
 
